@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 
-namespace Desacoplado.API.Consumer
+namespace GestionTareas.API.Consumer
 {
     public static class Crud<T>
     {
@@ -122,6 +122,33 @@ namespace Desacoplado.API.Consumer
                 }
             }
         }
+
+        public static async Task<T> Post<TRequest>(string url, TRequest data)
+        {
+            using (var client = new HttpClient())
+            {
+                var baseUrl = "https://localhost:7292"; 
+                client.BaseAddress = new Uri(baseUrl);
+
+                var response = await client.PostAsync(
+                    url,
+                    new StringContent(
+                        JsonConvert.SerializeObject(data),
+                        Encoding.UTF8,
+                        "application/json"
+                    )
+                );
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<T>(json);
+                }
+                else
+                {
+                    throw new Exception($"Error: {response.StatusCode}");
+                }
+            }
+        }
     }
 }
-    

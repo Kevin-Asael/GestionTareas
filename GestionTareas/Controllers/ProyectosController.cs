@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GestionTareas.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
@@ -7,6 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GestionTareas.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProyectosController : ControllerBase

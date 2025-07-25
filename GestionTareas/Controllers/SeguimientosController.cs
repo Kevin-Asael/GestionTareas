@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using GestionTareas.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
@@ -13,6 +14,7 @@ namespace GestionTareas.Controllers
     
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SeguimientosController : ControllerBase
     {
         private DbConnection connection;
