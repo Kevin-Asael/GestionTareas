@@ -6,10 +6,22 @@ namespace GestionTareas.API.Consumer
     public static class Crud<T>
     {
         public static string EndPoint { get; set; }
+        public static string Token { get; set; }  
+
+        private static HttpClient CreateClient()
+        {
+            var client = new HttpClient();
+            if (!string.IsNullOrEmpty(Token))
+            {
+                client.DefaultRequestHeaders.Authorization = 
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
+            }
+            return client;
+        }
 
         public static List<T> GetAll()
         {
-            using (var client = new HttpClient())
+            using (var client = CreateClient())
             { 
                 var response = client.GetAsync(EndPoint).Result;
                 if (response.IsSuccessStatusCode)
@@ -26,7 +38,7 @@ namespace GestionTareas.API.Consumer
 
         public static T GetById(int id)
         {
-            using (var client = new HttpClient())
+            using (var client = CreateClient())
             {
                 var response = client.GetAsync($"{EndPoint}/{id}").Result;
                 if (response.IsSuccessStatusCode)
@@ -43,7 +55,7 @@ namespace GestionTareas.API.Consumer
 
         public static T Create(T item)
         {
-            using (var client = new HttpClient())
+            using (var client = CreateClient())
             {
                 var response = client.PostAsync(
                         EndPoint, 
@@ -68,7 +80,7 @@ namespace GestionTareas.API.Consumer
 
         public static bool Update(int id, T item)
         {
-            using (var client = new HttpClient())
+            using (var client = CreateClient())
             {
                 var response = client.PutAsync(
                         $"{EndPoint}/{id}",
@@ -92,7 +104,7 @@ namespace GestionTareas.API.Consumer
 
         public static bool Delete(int id)
         {
-            using(var client = new HttpClient())
+            using (var client = CreateClient())
             {
                 var response = client.DeleteAsync($"{EndPoint}/{id}").Result;
                 if (response.IsSuccessStatusCode)
@@ -108,7 +120,7 @@ namespace GestionTareas.API.Consumer
 
         public static List<T> GetBy(string campo,int id)
         {
-            using (var client = new HttpClient())
+            using (var client = CreateClient())
             {
                 var response = client.GetAsync($"{EndPoint}/{campo}/{id}").Result;
                 if (response.IsSuccessStatusCode)
@@ -125,7 +137,7 @@ namespace GestionTareas.API.Consumer
 
         public static async Task<T> Post<TRequest>(string url, TRequest data)
         {
-            using (var client = new HttpClient())
+            using (var client = CreateClient())
             {
                 var baseUrl = "https://localhost:7292"; 
                 client.BaseAddress = new Uri(baseUrl);

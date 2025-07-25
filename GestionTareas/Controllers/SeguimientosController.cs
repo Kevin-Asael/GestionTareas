@@ -38,20 +38,22 @@ namespace GestionTareas.Controllers
         public Seguimiento Get(int id)
         {
             var seguimiento = connection.QuerySingleOrDefault<Seguimiento>(
-                "SELECT id, descripcion, fecha, estadoAnterior, estadoNuevo, tareaId, usuarioId FROM Seguimientos WHERE id = @id",
+                "SELECT id, fecha, estadoAnterior, estadoNuevo, tareaId, usuarioId FROM Seguimientos WHERE id = @id",
                 new { id = id }
             );
-            return seguimiento;
+            return seguimiento ?? throw new KeyNotFoundException($"No se encontró el seguimiento con ID {id}");
         }
 
         // POST api/Proyectos
         [HttpPost]
         public Seguimiento Post([FromBody] Seguimiento seguimiento)
         {
-            connection.Execute(
-                "INSERT INTO Seguimientos (descripcion, fecha, estadoAnterior, estadoNuevo, tareaId, usuarioId) VALUES (@descripcion, @fecha, @estadoAnterior, @estadoNuevo, @tareaId, @usuarioId)",
-                seguimiento
-            );
+            var sql = @"
+                INSERT INTO Seguimientos (fecha, estadoAnterior, estadoNuevo, tareaId, usuarioId)
+                VALUES (@fecha, @estadoAnterior, @estadoNuevo, @tareaId, @usuarioId);
+                SELECT CAST(SCOPE_IDENTITY() as int);";
+            var id = connection.QuerySingle<int>(sql, seguimiento);
+            seguimiento.id = id;
             return seguimiento;
         }
 
@@ -60,9 +62,9 @@ namespace GestionTareas.Controllers
         public void Put(int id, [FromBody] Seguimiento seguimiento)
         {
             connection.Execute(
-                "UPDATE Seguimientos SET descripcion = @descripcion, fecha = @fecha, estadoAnterior = @estadoAnterior, estadoNuevo = @estadoNuevo, tareaId = @tareaId, usuarioId = @usuarioId WHERE id = @id",
-                new { seguimiento.descripcion, seguimiento.fecha, seguimiento.estadoAnterior, seguimiento.estadoNuevo, seguimiento.tareaId, seguimiento.usuarioId, id }
-            );
+                "UPDATE Seguimientos SET fecha = @fecha, estadoAnterior = @estadoAnterior, estadoNuevo = @estadoNuevo, tareaId = @tareaId, usuarioId = @usuarioId WHERE id = @id",
+                new { seguimiento.fecha, seguimiento.estadoAnterior, seguimiento.estadoNuevo, seguimiento.tareaId, seguimiento.usuarioId, id }
+            );  
         }
 
         // DELETE api/Proyectos/5
@@ -70,7 +72,7 @@ namespace GestionTareas.Controllers
         public void Delete(int id)
         {
             connection.Execute(
-                "DELETE FROM Tareas WHERE id = @id",
+                "DELETE FROM Seguimientos WHERE id = @id",
                 new { id = id }
             );
         }

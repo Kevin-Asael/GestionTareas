@@ -1,0 +1,76 @@
+@model IEnumerable<GestionTareas.Models.Tarea>
+
+@{
+    ViewData["Title"] = "Reportes";
+    var criterioActual = ViewBag.Criterio as string ?? "estado";
+    var valorActual = ViewBag.Valor as string ?? "";
+    List<SelectListItem> valores = ViewBag.ValoresEstado;
+    if (criterioActual == "prioridad") valores = ViewBag.ValoresPrioridad;
+    else if (criterioActual == "proyecto") valores = ViewBag.ValoresProyecto;
+    else if (criterioActual == "usuario") valores = ViewBag.ValoresUsuario;
+}
+
+<h1>Reportes de Tareas</h1>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                Filtrar Tareas
+            </div>
+            <div class="card-body">
+                <form method="get" asp-action="Index">
+                    <div class="form-group mb-3">
+                        <label>Criterio de Búsqueda</label>
+                        <select name="criterio" class="form-control">
+                            <option value="estado" selected="@(criterioActual == "estado")">Por Estado</option>
+                            <option value="prioridad" selected="@(criterioActual == "prioridad")">Por Prioridad</option>
+                            <option value="proyecto" selected="@(criterioActual == "proyecto")">Por Proyecto</option>
+                            <option value="usuario" selected="@(criterioActual == "usuario")">Por Usuario</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Valor</label>
+                        <select name="valor" class="form-control">
+                            <option value="">Seleccione un valor...</option>
+                            @foreach (var v in valores)
+                            {
+                                <option value="@v.Value" selected="@(valorActual == v.Value)">@v.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Tareas por Estado</h3>
+        @foreach (var grupo in ViewBag.TareasPorEstado)
+        {
+            <h4>@grupo.Key</h4>
+            <partial name="_TareasListaPartial" model="grupo.Value" />
+        }
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>Tareas por Prioridad</h3>
+        @foreach (var grupo in ViewBag.TareasPorPrioridad)
+        {
+            <h4>@grupo.Key</h4>
+            <partial name="_TareasListaPartial" model="grupo.Value" />
+        }
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3>Tareas por Fecha de Vencimiento</h3>
+        <partial name="_TareasListaPartial" model="ViewBag.TareasPorFecha" />
+    </div>
+</div>

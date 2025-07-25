@@ -1,0 +1,29 @@
+@model IEnumerable<GestionTareas.Models.Tarea>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.titulo)</th>
+            <th>@Html.DisplayNameFor(model => model.estado)</th>
+            <th>@Html.DisplayNameFor(model => model.prioridad)</th>
+            <th>@Html.DisplayNameFor(model => model.fechaVencimiento)</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.titulo)</td>
+            <td>@Html.DisplayFor(modelItem => item.estado)</td>
+            <td>@Html.DisplayFor(modelItem => item.prioridad)</td>
+            <td>@Html.DisplayFor(modelItem => item.fechaVencimiento)</td>
+            <td>
+                @Html.ActionLink("Editar", "Edit", "Tareas", new { id=item.id }) |
+                @Html.ActionLink("Detalles", "Details", "Tareas", new { id=item.id }) |
+                @Html.ActionLink("Eliminar", "Delete", "Tareas", new { id=item.id })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

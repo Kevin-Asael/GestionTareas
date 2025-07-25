@@ -3,16 +3,33 @@ using GestionTareas.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestionTareas.MVC.Controllers
 {
+    [Authorize] 
     public class ProyectosController : Controller
     {
         // GET: ProyectosController
         public ActionResult Index()
         {
-            var proyectos = Crud<Proyecto>.GetAll();
-            return View(proyectos);
+            try
+            {
+                var token = User.FindFirst("JWTToken")?.Value;
+                if (string.IsNullOrEmpty(token))
+                {
+                    return RedirectToAction("Login", "AuthV");
+                }
+
+                Crud<Proyecto>.Token = token;  
+
+                var proyectos = Crud<Proyecto>.GetAll();
+                return View(proyectos);
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Login", "AuthV");
+            }
         }
 
         // GET: ProyectosController/Details/5

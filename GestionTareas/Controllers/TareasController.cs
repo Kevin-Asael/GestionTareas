@@ -31,13 +31,24 @@ namespace GestionTareas.Controllers
 
         // GET api/Proyectos/5
         [HttpGet("{id}")]
-        public Tarea Get(int id)
+        public IActionResult Get(int id)
         {
-            var tarea = connection.QuerySingleOrDefault<Tarea>(
-                "SELECT id, titulo, descripcion, fechaCreacion, fechaVencimiento, prioridad, estado, usuarioId, proyectoId FROM Tareas WHERE id = @id",
-                new { id = id }
-            );
-            return tarea;
+            try
+            {
+                var tarea = connection.QuerySingleOrDefault<Tarea>(
+                    "SELECT id, titulo, descripcion, fechaCreacion, fechaVencimiento, prioridad, estado, usuarioId, proyectoId FROM Tareas WHERE id = @id",
+                    new { id = id }
+                );
+
+                if (tarea == null)
+                    return NotFound($"No se encontró la tarea con ID {id}");
+
+                return Ok(tarea);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
         }
 
         // POST api/Proyectos

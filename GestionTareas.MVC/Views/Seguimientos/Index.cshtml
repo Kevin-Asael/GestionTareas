@@ -1,0 +1,103 @@
+﻿@model IEnumerable<GestionTareas.Models.Seguimiento>
+
+@{
+    ViewData["Title"] = "Seguimientos";
+    var seguimientosData = ViewBag.SeguimientosData as List<dynamic>;
+    var totalSeguimientos = seguimientosData?.Count ?? 0;
+}
+
+<div class="container">
+    <h1>Seguimientos de Tareas</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <div class="alert alert-info">
+                <strong>Total de registros encontrados:</strong> @totalSeguimientos
+            </div>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Crear Nuevo Seguimiento
+            </a>
+        </div>
+    </div>
+
+    @if (seguimientosData != null && seguimientosData.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tarea</th>
+                        <th>Usuario</th>
+                        <th>Fecha</th>
+                        <th>Estado Anterior</th>
+                        <th>Estado Nuevo</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in seguimientosData)
+                    {
+                        <tr>
+                            <td>@item.TareaTitulo</td>
+                            <td>@item.UsuarioNombre</td>
+                            <td>@item.fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td><span class="badge bg-secondary">@item.estadoAnterior</span></td>
+                            <td><span class="badge bg-primary">@item.estadoNuevo</span></td>
+                            <td>@item.descripcion</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    <a asp-action="Details" asp-route-id="@item.id" class="btn btn-sm btn-info">
+                                        <i class="fas fa-info-circle"></i> Detalles
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.id" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> No se encontraron registros de seguimiento.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Inicializar tooltips si estás usando Bootstrap 5
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        });
+    </script>
+}
