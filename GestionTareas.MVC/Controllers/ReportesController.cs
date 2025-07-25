@@ -32,10 +32,39 @@ namespace GestionTareas.MVC.Controllers
                 var usuarios = Crud<Usuario>.GetAll();
                 var seguimientos = Crud<Seguimiento>.GetAll();
 
+                // Aplicar filtro si se especifica
+                var tareasFiltradas = tareas;
+                var mensajeFiltro = "";
+                var cantidadTotal = tareas.Count;
+
+                if (!string.IsNullOrEmpty(criterio) && !string.IsNullOrEmpty(valor))
+                {
+                    switch (criterio.ToLower())
+                    {
+                        case "estado":
+                            tareasFiltradas = tareas.Where(t => t.estado.Contains(valor, StringComparison.OrdinalIgnoreCase)).ToList();
+                            mensajeFiltro = $"Tareas con estado '{valor}': {tareasFiltradas.Count} de {cantidadTotal}";
+                            break;
+                        case "prioridad":
+                            tareasFiltradas = tareas.Where(t => t.prioridad.Contains(valor, StringComparison.OrdinalIgnoreCase)).ToList();
+                            mensajeFiltro = $"Tareas con prioridad '{valor}': {tareasFiltradas.Count} de {cantidadTotal}";
+                            break;
+                        case "proyecto":
+                            var proyecto = proyectos.FirstOrDefault(p => p.id.ToString() == valor);
+                            tareasFiltradas = tareas.Where(t => t.proyectoId.ToString() == valor).ToList();
+                            mensajeFiltro = $"Tareas del proyecto '{proyecto?.nombre ?? "Desconocido"}': {tareasFiltradas.Count} de {cantidadTotal}";
+                            break;
+                        case "usuario":
+                            var usuario = usuarios.FirstOrDefault(u => u.id.ToString() == valor);
+                            tareasFiltradas = tareas.Where(t => t.usuarioId.ToString() == valor).ToList();
+                            mensajeFiltro = $"Tareas del usuario '{usuario?.nombre ?? "Desconocido"}': {tareasFiltradas.Count} de {cantidadTotal}";
+                            break;
+                    }
+                }
+
                 var seguimientosEnriquecidos = seguimientos.Select(s => new
                 {
                     s.id,
-                    s.descripcion,
                     s.fecha,
                     s.estadoAnterior,
                     s.estadoNuevo,
@@ -54,7 +83,6 @@ namespace GestionTareas.MVC.Controllers
                 ViewBag.TareasPorFecha = tareas.OrderBy(t => t.fechaVencimiento)
                                              .ToList();
 
-                
                 ViewBag.ValoresEstado = new List<SelectListItem>
                 {
                     new SelectListItem { Value = "Pendiente", Text = "Pendiente" },
@@ -84,6 +112,9 @@ namespace GestionTareas.MVC.Controllers
                 ViewBag.Seguimientos = seguimientosEnriquecidos;
                 ViewBag.Criterio = criterio;
                 ViewBag.Valor = valor;
+                ViewBag.TareasFiltradas = tareasFiltradas;
+                ViewBag.MensajeFiltro = mensajeFiltro;
+                ViewBag.HayFiltro = !string.IsNullOrEmpty(criterio) && !string.IsNullOrEmpty(valor);
 
                 return View(tareas);
             }
@@ -132,6 +163,5 @@ namespace GestionTareas.MVC.Controllers
                 return RedirectToAction("Login", "AuthV");
             }
         }
-
     }
 }

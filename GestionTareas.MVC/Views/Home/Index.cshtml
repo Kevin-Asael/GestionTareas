@@ -1,8 +1,41 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="home-container">
+    <div class="welcome-section">
+        <h1>Gestión de Tareas</h1>
+        <p class="lead">Sistema de gestión y seguimiento de proyectos y tareas</p>
+    </div>
 </div>
+
+<style>
+.home-container {
+    padding: 3rem 1rem;
+    max-width: 700px;
+    margin: 40px auto 0 auto;
+    background: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+
+.welcome-section {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.welcome-section h1 {
+    color: #2c3e50;
+    margin-bottom: 1.2rem;
+    font-size: 2.3rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.lead {
+    color: #555;
+    font-size: 1.15rem;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+</style>

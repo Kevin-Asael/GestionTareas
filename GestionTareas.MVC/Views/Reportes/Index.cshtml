@@ -1,5 +1,4 @@
 @model IEnumerable<GestionTareas.Models.Tarea>
-
 @{
     ViewData["Title"] = "Reportes";
     var criterioActual = ViewBag.Criterio as string ?? "estado";
@@ -8,6 +7,10 @@
     if (criterioActual == "prioridad") valores = ViewBag.ValoresPrioridad;
     else if (criterioActual == "proyecto") valores = ViewBag.ValoresProyecto;
     else if (criterioActual == "usuario") valores = ViewBag.ValoresUsuario;
+
+    var hayFiltro = ViewBag.HayFiltro as bool? ?? false;
+    var mensajeFiltro = ViewBag.MensajeFiltro as string ?? "";
+    var tareasFiltradas = ViewBag.TareasFiltradas as IEnumerable<GestionTareas.Models.Tarea>;
 }
 
 <h1>Reportes de Tareas</h1>
@@ -16,7 +19,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                Filtrar Tareas
+                <i class="fas fa-filter"></i> Filtrar Tareas
             </div>
             <div class="card-body">
                 <form method="get" asp-action="Index">
@@ -39,38 +42,123 @@
                             }
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                        <a href="@Url.Action("Index")" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Limpiar
+                        </a>
+                    </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    @if (hayFiltro)
+    {
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-chart-bar"></i> Resultado del Filtro
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@mensajeFiltro</h5>
+                    <div class="progress mb-3">
+                        <div class="progress-bar" role="progressbar"
+                             style="width: @(Model.Count() > 0 ? (tareasFiltradas.Count() * 100 / Model.Count()) : 0)%">
+                            @(Model.Count() > 0 ? Math.Round((double)tareasFiltradas.Count() / Model.Count() * 100, 1) : 0)%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@if (hayFiltro && tareasFiltradas != null)
+{
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-tasks"></i> Tareas Filtradas
+                        <span class="badge badge-light ms-2">@tareasFiltradas.Count()</span>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (tareasFiltradas.Any())
+                    {
+                        <partial name="_TareasListaPartial" model="tareasFiltradas" />
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> No se encontraron tareas que coincidan con el filtro aplicado.
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-chart-pie"></i> Tareas por Estado</h3>
+            </div>
+            <div class="card-body">
+                @foreach (var grupo in ViewBag.TareasPorEstado)
+                {
+                    <div class="mb-4">
+                        <h4>
+                            @grupo.Key
+                            <span class="badge badge-primary">@grupo.Value.Count</span>
+                        </h4>
+                        <partial name="_TareasListaPartial" model="grupo.Value" />
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row mt-4">
     <div class="col-md-12">
-        <h3>Tareas por Estado</h3>
-        @foreach (var grupo in ViewBag.TareasPorEstado)
-        {
-            <h4>@grupo.Key</h4>
-            <partial name="_TareasListaPartial" model="grupo.Value" />
-        }
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-exclamation-circle"></i> Tareas por Prioridad</h3>
+            </div>
+            <div class="card-body">
+                @foreach (var grupo in ViewBag.TareasPorPrioridad)
+                {
+                    <div class="mb-4">
+                        <h4>
+                            @grupo.Key
+                            <span class="badge badge-@(grupo.Key == "Alta" ? "danger" : grupo.Key == "Media" ? "warning" : "secondary")">
+                                @grupo.Value.Count
+                            </span>
+                        </h4>
+                        <partial name="_TareasListaPartial" model="grupo.Value" />
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="row mt-4">
     <div class="col-md-12">
-        <h3>Tareas por Prioridad</h3>
-        @foreach (var grupo in ViewBag.TareasPorPrioridad)
-        {
-            <h4>@grupo.Key</h4>
-            <partial name="_TareasListaPartial" model="grupo.Value" />
-        }
-    </div>
-</div>
-
-<div class="row mt-4">
-    <div class="col-md-12">
-        <h3>Tareas por Fecha de Vencimiento</h3>
-        <partial name="_TareasListaPartial" model="ViewBag.TareasPorFecha" />
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-calendar-alt"></i> Tareas por Fecha de Vencimiento</h3>
+            </div>
+            <div class="card-body">
+                <partial name="_TareasListaPartial" model="ViewBag.TareasPorFecha" />
+            </div>
+        </div>
     </div>
 </div>

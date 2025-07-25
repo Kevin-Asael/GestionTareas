@@ -3,56 +3,66 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<div class="seguimientos-container">
+    <h1>Edit</h1>
 
-<h1>Edit</h1>
-
-<h4>Seguimiento</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="id" class="control-label"></label>
-                <input asp-for="id" class="form-control" />
-                <span asp-validation-for="id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="fecha" class="control-label"></label>
-                <input asp-for="fecha" class="form-control" />
-                <span asp-validation-for="fecha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="estadoAnterior" class="control-label"></label>
-                <input asp-for="estadoAnterior" class="form-control" />
-                <span asp-validation-for="estadoAnterior" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="estadoNuevo" class="control-label"></label>
-                <input asp-for="estadoNuevo" class="form-control" />
-                <span asp-validation-for="estadoNuevo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="tareaId" class="control-label"></label>
-                <input asp-for="tareaId" class="form-control" />
-                <span asp-validation-for="tareaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="usuarioId" class="control-label"></label>
-                <input asp-for="usuarioId" class="form-control" />
-                <span asp-validation-for="usuarioId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <h4>Seguimiento</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit" class="seguimientos-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="id" class="control-label"></label>
+                    <input asp-for="id" class="form-control" />
+                    <span asp-validation-for="id" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="fecha" class="control-label"></label>
+                    <input asp-for="fecha" class="form-control" />
+                    <span asp-validation-for="fecha" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="estadoAnterior" class="control-label"></label>
+                    <input asp-for="estadoAnterior" class="form-control" />
+                    <span asp-validation-for="estadoAnterior" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="estadoNuevo" class="control-label"></label>
+                    <input asp-for="estadoNuevo" class="form-control" />
+                    <span asp-validation-for="estadoNuevo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="tareaId" class="control-label"></label>
+                    <input asp-for="tareaId" class="form-control" />
+                    <span asp-validation-for="tareaId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="usuarioId" class="control-label"></label>
+                    <input asp-for="usuarioId" class="form-control" />
+                    <span asp-validation-for="usuarioId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<style>
+    .seguimientos-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 15px;
+    }
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    .seguimientos-form {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+</style>

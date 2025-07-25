@@ -3,72 +3,83 @@
 @{
     ViewData["Title"] = "Nueva Tarea";
 }
+<div class="Tareas-container">
+    <h1>Nueva Tarea</h1>
 
-<h1>Nueva Tarea</h1>
-
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create" class="Tareas-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             
-            <div class="form-group mb-3">
-                <label asp-for="titulo" class="control-label">Título</label>
-                <input asp-for="titulo" class="form-control" />
-                <span asp-validation-for="titulo" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="titulo" class="control-label">Título</label>
+                    <input asp-for="titulo" class="form-control" />
+                    <span asp-validation-for="titulo" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="descripcion" class="control-label">Descripción</label>
-                <textarea asp-for="descripcion" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="descripcion" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="descripcion" class="control-label">Descripción</label>
+                    <textarea asp-for="descripcion" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="descripcion" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="fechaVencimiento" class="control-label">Fecha de Vencimiento</label>
-                <input asp-for="fechaVencimiento" type="date" class="form-control" />
-                <span asp-validation-for="fechaVencimiento" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="fechaVencimiento" class="control-label">Fecha de Vencimiento</label>
+                    <input asp-for="fechaVencimiento" type="date" class="form-control" />
+                    <span asp-validation-for="fechaVencimiento" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="prioridad" class="control-label">Prioridad</label>
-                <select asp-for="prioridad" asp-items="ViewBag.Prioridades" class="form-control">
-                    <option value="">Seleccione una prioridad...</option>
-                </select>
-                <span asp-validation-for="prioridad" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="prioridad" class="control-label">Prioridad</label>
+                    <select asp-for="prioridad" asp-items="ViewBag.Prioridades" class="form-control">
+                        <option value="">Seleccione una prioridad...</option>
+                    </select>
+                    <span asp-validation-for="prioridad" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="estado" class="control-label">Estado</label>
-                <select asp-for="estado" asp-items="ViewBag.Estados" class="form-control">
-                    <option value="">Seleccione un estado...</option>
-                </select>
-                <span asp-validation-for="estado" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="estado" class="control-label">Estado</label>
+                    <select asp-for="estado" asp-items="ViewBag.Estados" class="form-control">
+                        <option value="">Seleccione un estado...</option>
+                    </select>
+                    <span asp-validation-for="estado" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="usuarioId" class="control-label">Asignado a</label>
-                <select asp-for="usuarioId" asp-items="ViewBag.Usuarios" class="form-control">
-                    <option value="">Seleccione un usuario...</option>
-                </select>
-                <span asp-validation-for="usuarioId" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="usuarioId" class="control-label">Asignado a</label>
+                    <select asp-for="usuarioId" asp-items="ViewBag.Usuarios" class="form-control">
+                        <option value="">Seleccione un usuario...</option>
+                    </select>
+                    <span asp-validation-for="usuarioId" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="proyectoId" class="control-label">Proyecto</label>
-                <select asp-for="proyectoId" asp-items="ViewBag.Proyectos" class="form-control">
-                    <option value="">Seleccione un proyecto...</option>
-                </select>
-                <span asp-validation-for="proyectoId" class="text-danger"></span>
-            </div>
+                <div class="form-group mb-3">
+                    <label asp-for="proyectoId" class="control-label">Proyecto</label>
+                    <select asp-for="proyectoId" asp-items="ViewBag.Proyectos" class="form-control">
+                        <option value="">Seleccione un proyecto...</option>
+                    </select>
+                    <span asp-validation-for="proyectoId" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mt-4">
-                <button type="submit" class="btn btn-primary">Crear</button>
-                <a asp-action="Index" class="btn btn-secondary">Volver a la Lista</a>
-            </div>
-        </form>
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary">Crear</button>
+                    <a asp-action="Index" class="btn btn-secondary">Volver a la Lista</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+<style>
+    .Tareas-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 0 15px;
+    }
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    .Tareas-form {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+</style>

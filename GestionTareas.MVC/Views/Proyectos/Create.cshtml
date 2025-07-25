@@ -1,53 +1,68 @@
 ﻿@model GestionTareas.Models.Proyecto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Crear Proyecto";
 }
 
-<h1>Create</h1>
+<div class="proyecto-container">
+    <h1>Crear Proyecto</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create" class="proyecto-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h4>Proyecto</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="id" class="control-label"></label>
-                <input asp-for="id" class="form-control" />
-                <span asp-validation-for="id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="nombre" class="control-label"></label>
-                <input asp-for="nombre" class="form-control" />
-                <span asp-validation-for="nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="descripcion" class="control-label"></label>
-                <input asp-for="descripcion" class="form-control" />
-                <span asp-validation-for="descripcion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="fechaInicio" class="control-label"></label>
-                <input asp-for="fechaInicio" class="form-control" />
-                <span asp-validation-for="fechaInicio" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="fechaFin" class="control-label"></label>
-                <input asp-for="fechaFin" class="form-control" />
-                <span asp-validation-for="fechaFin" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group mb-3">
+                    <label asp-for="nombre" class="control-label">Nombre del Proyecto</label>
+                    <input asp-for="nombre" class="form-control" placeholder="Ingrese el nombre del proyecto" />
+                    <span asp-validation-for="nombre" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="descripcion" class="control-label">Descripción</label>
+                    <textarea asp-for="descripcion" class="form-control" rows="3" 
+                             placeholder="Describa el proyecto"></textarea>
+                    <span asp-validation-for="descripcion" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="fechaInicio" class="control-label">Fecha de Inicio</label>
+                    <input asp-for="fechaInicio" type="date" class="form-control" />
+                    <span asp-validation-for="fechaInicio" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="fechaFin" class="control-label">Fecha de Finalización</label>
+                    <input asp-for="fechaFin" type="date" class="form-control" />
+                    <span asp-validation-for="fechaFin" class="text-danger"></span>
+                </div>
+
+                <div class="form-group buttons-group">
+                    <button type="submit" class="btn btn-primary">Crear Proyecto</button>
+                    <a asp-action="Index" class="btn btn-secondary">Volver a la Lista</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<style>
+.proyecto-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 15px;
 }
+
+.proyecto-form {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.buttons-group {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6;
+}
+</style>
